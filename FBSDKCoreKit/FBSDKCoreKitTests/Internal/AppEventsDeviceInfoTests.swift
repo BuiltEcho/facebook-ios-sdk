@@ -47,4 +47,27 @@ final class AppEventsDeviceInfoTests: XCTestCase {
       "Should use the provided settings"
     )
   }
+
+  func testCarrierMetadataAlwaysUsesSupportedUnavailablePlaceholder() {
+    XCTAssertEqual(_AppEventsDeviceInfo.carrier(), "NoCarrier")
+  }
+
+  func testInitialAndExpiredMetadataCollectionNeverRestoresCarrierData() throws {
+    settings.shouldUseCachedValuesForExpensiveMetadata = false
+
+    let initialMetadata = try decodedMetadata(from: deviceInfo)
+    XCTAssertEqual(initialMetadata[8] as? String, "NoCarrier")
+
+    deviceInfo.carrierName = "Carrier that must not survive a refresh"
+    deviceInfo.lastGroup1CheckTime = 0
+
+    let refreshedMetadata = try decodedMetadata(from: deviceInfo)
+    XCTAssertEqual(refreshedMetadata[8] as? String, "NoCarrier")
+  }
+
+  private func decodedMetadata(from deviceInfo: _AppEventsDeviceInfo) throws -> [Any] {
+    let encoded = try XCTUnwrap(deviceInfo.encodedDeviceInfo)
+    let data = try XCTUnwrap(encoded.data(using: .utf8))
+    return try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [Any])
+  }
 }

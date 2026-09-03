@@ -47,10 +47,6 @@ FOUNDATION_EXPORT Class fbsdkdfl_SFSafariViewControllerClass(void);
 
 FOUNDATION_EXPORT Class fbsdkdfl_ACAccountStoreClass(void);
 
-#pragma mark - CoreTelephony Classes
-
-FOUNDATION_EXPORT Class fbsdkdfl_CTTelephonyNetworkInfoClass(void);
-
 /**
  This class provides a way to load constants and methods from Apple Frameworks in a dynamic
  fashion.  It allows the SDK to be just dragged into a project without having to specify additional

@@ -137,4 +137,12 @@ id getVariableFromInstance(NSObject *_Nullable instance, NSString *_Nullable var
 @interface FBSDKSKAdNetworkConversionConfigurationTests : XCTestCase
 @end
 
+@interface FBSDKAppEventsDeviceInfo (HardlineCarrierMetadataTesting)
+
+@property (nonatomic) long lastGroup1CheckTime;
+
++ (NSString *)_getCarrier NS_SWIFT_NAME(carrier());
+
+@end
+
 NS_ASSUME_NONNULL_END

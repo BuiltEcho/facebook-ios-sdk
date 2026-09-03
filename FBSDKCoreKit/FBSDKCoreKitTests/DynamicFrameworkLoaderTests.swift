@@ -8,7 +8,6 @@
 
 @testable import FBSDKCoreKit
 
-import CoreTelephony
 import SafariServices
 import Security
 import Social
@@ -240,10 +239,4 @@ final class DynamicFrameworkLoaderTests: XCTestCase {
     )
   }
 
-  func testCTTelephonyNetworkInfoClass() {
-    XCTAssertTrue(
-      fbsdkdfl_CTTelephonyNetworkInfoClass() is CTTelephonyNetworkInfo.Type,
-      "Should dynamically load the CTTelephonyNetworkInfo class"
-    )
-  }
 }

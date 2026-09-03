@@ -12,15 +12,9 @@
 #import <sys/sysctl.h>
 #import <sys/utsname.h>
 
-#if !TARGET_OS_TV
- #import <CoreTelephony/CTCarrier.h>
- #import <CoreTelephony/CTTelephonyNetworkInfo.h>
-#endif
-
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import "FBSDKDynamicFrameworkLoader.h"
 #import "FBSDKInternalUtility+Internal.h"
 
 #define FB_ARRAY_COUNT(x) sizeof(x) / sizeof(x[0])
@@ -215,14 +209,11 @@ static FBSDKAppEventsDeviceInfo *sharedInstance;
 
 + (NSString *)_getCarrier
 {
-#if TARGET_OS_SIMULATOR
+  // Carrier metadata is optional and the SDK already uses this value when a
+  // carrier is unavailable. Avoid constructing CTTelephonyNetworkInfo here:
+  // its synchronous XPC initialization can block the application's main
+  // thread when App Events or ATE metadata is collected.
   return @"NoCarrier";
-#else
-  // Dynamically load class for this so calling app doesn't need to link framework in.
-  CTTelephonyNetworkInfo *networkInfo = [[fbsdkdfl_CTTelephonyNetworkInfoClass() alloc] init];
-  CTCarrier *carrier = networkInfo.subscriberCellularProvider;
-  return carrier.carrierName ?: @"NoCarrier";
-#endif
 }
 
 #pragma clang diagnostic pop
