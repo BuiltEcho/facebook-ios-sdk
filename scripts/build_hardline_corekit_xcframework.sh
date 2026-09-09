@@ -7,6 +7,8 @@ if [ "$#" -ne 1 ] || [ ! -x "$1" ]; then
   exit 64
 fi
 
+: "${HARDLINE_SDK_SIGNING_IDENTITY:?Set an Apple Development or Apple Distribution signing identity}"
+
 ROOT=$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)
 XCODEGEN=$1
 OUTPUT="$ROOT/build/hardline"
@@ -70,6 +72,12 @@ if grep -R -a -q 'CTTelephonyNetworkInfo' "$XCFRAMEWORK"; then
 fi
 
 find "$XCFRAMEWORK" -exec touch -h -t 202608270000.00 {} +
+# SDK provenance must be signed before packaging; app archive signing does not
+# replace this XCFramework signature (App Store ITMS-91065).
+codesign --timestamp --sign "$HARDLINE_SDK_SIGNING_IDENTITY" "$XCFRAMEWORK"
+codesign --verify --strict \
+  -R '=anchor apple generic and certificate leaf[subject.OU] = "7U6FP8M3C7"' \
+  "$XCFRAMEWORK"
 (cd "$OUTPUT" && find "$(basename "$XCFRAMEWORK")" -print | LC_ALL=C sort | COPYFILE_DISABLE=1 zip -X -y -q "$(basename "$ZIP")" -@)
 
 echo "$ZIP"

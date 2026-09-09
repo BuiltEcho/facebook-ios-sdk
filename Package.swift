@@ -136,7 +136,7 @@ extension Target {
 
     static func remoteBinaryURLString(for targetName: String) -> String {
         if targetName == .Prefixed.core {
-            return "https://github.com/BuiltEcho/facebook-ios-sdk/releases/download/v18.1.1-hardline.1/\(targetName)-Dynamic_XCFramework.zip"
+            return "https://github.com/BuiltEcho/facebook-ios-sdk/releases/download/v18.1.1-hardline.2/\(targetName)-Dynamic_XCFramework.zip"
         }
         return "https://github.com/facebook/facebook-ios-sdk/releases/download/v18.1.1/\(targetName)-Dynamic_XCFramework.zip"
     }
@@ -201,7 +201,7 @@ extension Target {
 
         static let core = binaryTarget(
             name: .Prefixed.core,
-            remoteChecksum: "f0d0a443f956d2ddc1a518163be7a14809996662de5721df5eaf5d796f5d66ae"
+            remoteChecksum: "14c0b396ae8f415fb3a2184a7ffc2200a44ea4c0f264cae08b13811cfd32662b"
         )
 
         static let login = binaryTarget(
